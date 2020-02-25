@@ -2,28 +2,26 @@ package ru.sharashin.tacocloud.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.sharashin.tacocloud.domain.Ingredient;
 import ru.sharashin.tacocloud.domain.Taco;
 
 import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class JdbcTacoRepository implements TacoRepository {
 
 	private JdbcTemplate jdbc;
+	private SimpleJdbcInsert tacoSaver;
 
 	@Autowired
 	public JdbcTacoRepository(JdbcTemplate jdbc) {
 		this.jdbc = jdbc;
+		this.tacoSaver = new SimpleJdbcInsert(jdbc).withTableName("Taco").usingGeneratedKeyColumns("id");
 	}
 
 	@Override
@@ -38,13 +36,10 @@ public class JdbcTacoRepository implements TacoRepository {
 
 	private long saveTacoInfo(Taco taco) {
 		taco.setCreatedAt(new Date());
-		PreparedStatementCreator psc = new PreparedStatementCreatorFactory(
-				"insert into Taco (name, createdAt) values (?, ?)", Types.VARCHAR, Types.TIMESTAMP
-		).newPreparedStatementCreator(Arrays.asList(taco.getName(), new Timestamp(taco.getCreatedAt().getTime())));
-
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbc.update(psc, keyHolder);
-		return Objects.requireNonNull(keyHolder.getKey()).longValue();
+		Map<String, Object> tacoArgs = new HashMap<>();
+		tacoArgs.put("name", taco.getName());
+		tacoArgs.put("createdAt", new Timestamp(taco.getCreatedAt().getTime()));
+		return tacoSaver.executeAndReturnKey(tacoArgs).longValue();
 	}
 
 	private void saveIngredientToTaco(Ingredient ingredient, long tacoId) {

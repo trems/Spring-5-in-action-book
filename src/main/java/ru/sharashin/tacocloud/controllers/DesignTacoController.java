@@ -67,13 +67,13 @@ public class DesignTacoController {
 	}
 
 	@PostMapping
-	public String processDesign(@Valid Taco taco, Errors errors, @ModelAttribute Order order, Model model) {
+	public String processDesign(@Valid Taco taco, Errors errors, @ModelAttribute(binding = false) Order order) {
 		if (errors.hasErrors()) {
 			return "design";
 		}
 		Taco saved = designRepository.save(taco);
-		order.addDesign(taco);
-		log.info("Processing taco " + taco);
+		order.addDesign(saved);
+		log.info("Processing taco " + saved);
 		return "redirect:/orders/current";
 	}
 
