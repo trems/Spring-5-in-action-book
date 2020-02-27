@@ -48,8 +48,6 @@ public class DesignTacoController {
 	public String showDesignForm(Model model) {
 		populateModelWithIngredients(model);
 
-//		model.addAttribute("taco", new Taco());
-
 		return "design";
 	}
 

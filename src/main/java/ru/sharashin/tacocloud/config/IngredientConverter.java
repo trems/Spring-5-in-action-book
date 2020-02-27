@@ -9,6 +9,7 @@ import ru.sharashin.tacocloud.domain.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -32,11 +33,13 @@ public class IngredientConverter implements Converter<String[], List<Ingredient>
 	}
 
 	private Ingredient getIngredient(String id) {
-		Ingredient ingredient = cache.get(id);
-		if (ingredient == null) {
-			ingredient = ingredientRepository.findOndById(id);
+		Ingredient result = cache.get(id);
+		if (result == null) {
+			Optional<Ingredient> ingredientFromDb = ingredientRepository.findById(id);
+			result = ingredientFromDb.orElseThrow();
+			cache.put(result.getId(), result);
 		}
-		return ingredient;
+		return result;
 	}
 
 	@Override
