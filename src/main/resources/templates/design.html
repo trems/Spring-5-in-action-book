@@ -8,9 +8,8 @@
 </head>
 
 <body>
-
-<h1>Design your taco!</h1>
-<img th:src="@{/images/TacoCloud.gif}"/>
+<th:block th:include="header"/>
+<h2>Design your taco!</h2>
 <form method="POST" th:action="@{/design}" th:object="${taco}">
     <div class="grid">
         <div class="ingredient-group" id="wraps">

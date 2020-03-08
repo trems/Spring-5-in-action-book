@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <h1>Welcome to...</h1>
-    <img th:src="@{/images/TacoCloud.gif}" alt="">
+<th:block th:include="header"/>
+    <p th:unless="${@authenticationSystem.isLogged()}">Please, <a href="/register">register</a> or <a href="/login">log in</a> to order a taco!</p>
 </body>
 </html>

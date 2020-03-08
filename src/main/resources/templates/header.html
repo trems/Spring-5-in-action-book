@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title></title>
+</head>
+
+<body>
+<h1>Taco Cloud</h1>
+<img th:src="@{/images/TacoCloud.gif}" alt="">
+<div th:if="${@authenticationSystem.isLogged()}">
+    <form method="POST" th:action="@{/logout}">
+        <input type="submit" value="Logout"/>
+    </form>
+    <a href="/design">Design taco</a>
+    <a href="/orders/current    ">Process order</a>
+</div>
+</body>
+</html>

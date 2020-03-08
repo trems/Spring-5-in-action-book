@@ -26,6 +26,9 @@ public class Order implements Serializable {
 	@ManyToMany(targetEntity = Taco.class)
 	private List<Taco> tacos = new ArrayList<>();
 
+	@ManyToOne
+	private User user;
+
 	private Date placedAt;
 
 	@PrePersist
@@ -35,6 +38,8 @@ public class Order implements Serializable {
 
 	@NotBlank(message = "Name is required")
 	private String name;
+	@Pattern(regexp = "^\\+7([\\d]{10})$", message = "Not valid phone number")
+	private String phoneNumber;
 	@NotBlank(message = "Street is required")
 	private String street;
 	@NotBlank(message = "City is required")

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title th:text="'Registration - ' + ${@environment.getProperty('spring.application.name')}"></title>
+</head>
+
+<body>
+<th:block th:include="header"/>
+
+<h2>Register</h2>
+<form method="POST" th:action="@{/register}" id="registerForm">
+    <label for="username">Username: </label>
+    <input type="text" id="username" name="username"/><br/>
+    <label for="password">Password: </label>
+    <input type="password" id="password" name="password"/><br/>
+    <label for="confirm">Confirm password: </label>
+    <input type="password" id="confirm" name="confirm" oninput="isPassConfirmed()"/><span hidden id="passNotMatch">Passwords not match!</span><br/>
+    <label for="fullname">Full name: </label>
+    <input type="text" id="fullname" name="fullname"/><br/>
+    <label for="street">Street: </label>
+    <input type="text" id="street" name="street"/><br/>
+    <label for="city">City: </label>
+    <input type="text" id="city" name="city"/><br/>
+    <label for="state">State: </label>
+    <input type="text" id="state" name="state"/><br/>
+    <label for="zip">Zip: </label>
+    <input type="text" id="zip" name="zip"/><br/>
+    <label for="phoneNumber">Phone: </label>
+    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="+7XXXXXXXXXX" value="+7"/><br/>
+    <input type="submit" id="submitReg" value="Register" disabled="disabled"/>
+</form>
+<script>
+    const passField = document.getElementById("password");
+    const confField = document.getElementById("confirm");
+    const submitBtn = document.getElementById("submitReg");
+    const passNotMatch = document.getElementById("passNotMatch");
+    function isPassConfirmed() {
+        if (passField.value === confField.value) {
+            passNotMatch.setAttribute("hidden", "hidden");
+            submitBtn.removeAttribute("disabled");
+        } else {
+            passNotMatch.removeAttribute("hidden");
+            submitBtn.setAttribute("disabled", "disabled");
+        }
+    }
+
+</script>
+</body>
+</html>

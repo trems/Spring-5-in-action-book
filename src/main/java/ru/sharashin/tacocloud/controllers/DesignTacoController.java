@@ -2,6 +2,7 @@ package ru.sharashin.tacocloud.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -12,6 +13,7 @@ import ru.sharashin.tacocloud.domain.Ingredient;
 import ru.sharashin.tacocloud.domain.Ingredient.Type;
 import ru.sharashin.tacocloud.domain.Order;
 import ru.sharashin.tacocloud.domain.Taco;
+import ru.sharashin.tacocloud.domain.User;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -35,7 +37,9 @@ public class DesignTacoController {
 
 	@ModelAttribute(name = "order")
 	public Order order() {
-		return new Order();
+		Order order = new Order();
+		prefillOrderFromUserInfo(order);
+		return order;
 	}
 
 	@ModelAttribute(name = "taco")
@@ -73,6 +77,17 @@ public class DesignTacoController {
 		order.addDesign(saved);
 		log.info("Processing taco " + saved);
 		return "redirect:/orders/current";
+	}
+
+
+	private void prefillOrderFromUserInfo(Order order) {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		order.setName(user.getFullname());
+		order.setPhoneNumber(user.getPhoneNumber());
+		order.setState(user.getState());
+		order.setCity(user.getCity());
+		order.setStreet(user.getStreet());
+		order.setZip(user.getZip());
 	}
 
 }
