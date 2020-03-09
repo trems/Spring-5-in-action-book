@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: Taco Cloud
+  jpa:
+    generate-ddl: true
+    show-sql: true
+
+server:
+  ssl:
+    key-store: classpath:KeyStore.jks
+    key-store-password: qwerty123
+    key-password: qwerty123
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
